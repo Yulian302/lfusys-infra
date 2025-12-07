@@ -22,7 +22,7 @@ resource "aws_subnet" "public" {
     Project     = "lfusys"
     Environment = "dev"
     Owner       = "Yulian"
-    Name        = "lfusys-subnet"
+    Name        = "lfusys-subnet-public"
   }
 }
 
@@ -35,7 +35,7 @@ resource "aws_subnet" "private" {
     Project     = "lfusys"
     Environment = "dev"
     Owner       = "Yulian"
-    Name        = "lfusys-subnet"
+    Name        = "lfusys-subnet-private"
   }
 }
 

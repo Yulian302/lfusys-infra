@@ -1,15 +1,16 @@
 
 
-resource "aws_instance" "upload_worker" {
+
+resource "aws_instance" "gateway" {
   ami           = data.aws_ami.ec2_amis.id
-  count         = 1 // change later
   instance_type = "t3.nano"
-  subnet_id     = var.subnet_private_id
+  subnet_id     = var.subnet_public_id
+  key_name      = "lfusys-admin"
 
   tags = {
     Project     = "lfusys"
     Environment = "dev"
     Owner       = "Yulian"
-    Name        = "lfusys-services-upload"
+    Name        = "lfusys-services-gateway"
   }
 }
