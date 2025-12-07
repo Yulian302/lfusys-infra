@@ -16,11 +16,12 @@ data "aws_ami" "ec2_amis" {
 resource "aws_instance" "session_service" {
   ami           = data.aws_ami.ec2_amis.id
   instance_type = "t3.nano"
-  subnet_id     = var.subnet_public_id
+  subnet_id     = var.subnet_private_id
 
   tags = {
     Project     = "lfusys"
     Environment = "dev"
     Owner       = "Yulian"
+    Name        = "lfusys-services-session"
   }
 }
