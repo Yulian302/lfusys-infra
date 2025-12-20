@@ -5,6 +5,12 @@ resource "aws_dynamodb_table" "uploads" {
   hash_key     = "upload_id"
   range_key    = "created_at"
 
+  global_secondary_index {
+    name            = "user_email-index"
+    projection_type = "ALL"
+    hash_key        = "user_email"
+  }
+
   attribute {
     name = "upload_id"
     type = "S"
@@ -12,6 +18,11 @@ resource "aws_dynamodb_table" "uploads" {
 
   attribute {
     name = "created_at"
+    type = "S"
+  }
+
+  attribute {
+    name = "user_email"
     type = "S"
   }
 
