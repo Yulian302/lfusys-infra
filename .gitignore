@@ -6,3 +6,5 @@ terraform.tfstate*
 *.tfstate.backup
 
 tmp
+
+admin.tf
