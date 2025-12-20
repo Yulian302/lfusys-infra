@@ -1,10 +1,9 @@
-
 ```mermaid
 
 sequenceDiagram
     participant FE as Frontend
     participant GW as Gateway Service (Auth + API)
-    participant DB@{"type":"database"}
+    participant "DB@{"type":"database"}
 
     FE->>GW: POST /auth/login (email, password)
     activate GW
@@ -44,3 +43,5 @@ sequenceDiagram
             end
         end
     end
+
+```
