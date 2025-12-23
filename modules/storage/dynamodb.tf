@@ -3,7 +3,6 @@ resource "aws_dynamodb_table" "uploads" {
   name         = "uploads"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "upload_id"
-  range_key    = "created_at"
 
   global_secondary_index {
     name            = "user_email-index"
@@ -16,10 +15,6 @@ resource "aws_dynamodb_table" "uploads" {
     type = "S"
   }
 
-  attribute {
-    name = "created_at"
-    type = "S"
-  }
 
   attribute {
     name = "user_email"
