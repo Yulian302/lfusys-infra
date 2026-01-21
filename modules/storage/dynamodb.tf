@@ -33,7 +33,12 @@ resource "aws_dynamodb_table" "files" {
   name         = "files"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "file_id"
-  range_key    = "created_at"
+
+  global_secondary_index {
+    name = "owner_email-index"
+    projection_type = "ALL"
+    hash_key = "owner_email"
+  }
 
   attribute {
     name = "file_id"
@@ -41,7 +46,7 @@ resource "aws_dynamodb_table" "files" {
   }
 
   attribute {
-    name = "created_at"
+    name = "owner_email"
     type = "S"
   }
 
