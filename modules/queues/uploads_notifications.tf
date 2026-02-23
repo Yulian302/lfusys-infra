@@ -10,9 +10,8 @@ resource "aws_sqs_queue" "uploads_notifications" {
   })
 
   tags = {
-    Project     = "lfusys"
-    Environment = "dev"
-    Owner       = "Yulian"
+    Project = var.project
+
   }
 }
 
@@ -21,8 +20,7 @@ resource "aws_sqs_queue" "uploads_notifications_dlq" {
   fifo_queue = true
 
   tags = {
-    Project     = "lfusys"
-    Environment = "dev"
-    Owner       = "Yulian"
+    Project = var.project
+
   }
 }

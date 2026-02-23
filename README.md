@@ -1,5 +1,11 @@
 
 # System arhitecture
+# Final AWS cloud architecture
+## Network / infrastructure diagram
+![Network](./aws/network-diagram.svg)
+Updated 2026/02/23
+
+# Design Evolution
 ## Initial sketch
 ![System Diagram Sketch](./design/design.png)
 
