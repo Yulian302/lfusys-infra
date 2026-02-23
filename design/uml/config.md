@@ -13,7 +13,6 @@ direction TB
     }
 
     class ServiceConfig{
-        +UploadsURL string
         +UploadsAddr string
         +GatewayAddr string
         +SessionGRPCUrl string

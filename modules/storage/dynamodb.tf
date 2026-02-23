@@ -27,9 +27,7 @@ resource "aws_dynamodb_table" "uploads" {
   }
 
   tags = {
-    Project     = "lfusys"
-    Environment = "dev"
-    Owner       = "Yulian"
+    Project = var.project
   }
 }
 
@@ -56,9 +54,7 @@ resource "aws_dynamodb_table" "files" {
   }
 
   tags = {
-    Project     = "lfusys"
-    Environment = "dev"
-    Owner       = "Yulian"
+    Project = var.project
   }
 }
 
@@ -73,8 +69,6 @@ resource "aws_dynamodb_table" "users" {
   }
 
   tags = {
-    Project     = "lfusys"
-    Environment = "dev"
-    Owner       = "Yulian"
+    Project = var.project
   }
 }

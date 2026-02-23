@@ -8,3 +8,6 @@ terraform.tfstate*
 tmp
 
 admin.tf
+
+
+.env
