@@ -3,7 +3,14 @@
 # Final AWS cloud architecture
 ## Network / infrastructure diagram
 ![Network](./aws/network-diagram.svg)
-Updated 2026/02/23
+<br>Updated 2026/02/23
+
+<div style="text-align:center;">
+
+![Dependency](./aws/service-dependency-diagram.svg)
+<br>Updated 2026/02/23
+
+</div>
 
 # Design Evolution
 ## Initial sketch
