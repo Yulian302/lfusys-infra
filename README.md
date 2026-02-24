@@ -16,6 +16,11 @@
 ## Initial sketch
 ![System Diagram Sketch](./design/design.png)
 
+## Evolved sketch
+![System Diagram Sketch Evolved](./design/evolved_design_24_02_2026.svg)
+
+<br>Updated 2026/02/24
+
 ## Evolved Service Interactions Diagram
 ![Service Interactions Diagram](./design/evolution/20-12-2025-service-interaction-diagram.png)
 
