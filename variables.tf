@@ -19,6 +19,23 @@ variable "domain" {
   default     = "api.lfusys.online"
 }
 
+variable "frontend_url" {
+  description = "Frontend URL for CORS and redirects"
+  default     = "https://www.lfusys.online"
+}
+
+variable "enable_high_availability" {
+  description = "Deploy across multiple AZs for HA (higher cost). For testing, set to false"
+  type        = bool
+  default     = true
+}
+
+variable "desired_count" {
+  description = "Number of ECS task instances to run per service"
+  type        = number
+  default     = 2
+}
+
 variable "github_client_id" {
   description = "GitHub OAuth Client ID"
   type        = string
