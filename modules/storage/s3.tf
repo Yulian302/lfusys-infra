@@ -22,3 +22,13 @@ resource "aws_s3_bucket_ownership_controls" "chunks" {
   }
 }
 
+resource "aws_s3_bucket_cors_configuration" "lfusyschunks-fronend-cors" {
+  bucket = aws_s3_bucket.lfusyschunks.id
+
+  cors_rule {
+    allowed_headers = []
+    allowed_methods = ["GET"]
+    allowed_origins = ["*"]
+    expose_headers  = []
+  }
+}

@@ -40,6 +40,7 @@ resource "aws_ecs_task_definition" "sessions" {
         { name = "TRACING", value = "false" },
         { name = "TRACING_ADDR", value = "jaeger:4317" },
         { name = "AWS_REGION", value = var.region },
+        { name = "AWS_BUCKET_NAME", value = var.aws_bucket_name },
         { name = "SESSION_GRPC_ADDR", value = ":50051" },
         { name = "DYNAMODB_UPLOADS_TABLE_NAME", value = "${var.environment}-uploads" },
         { name = "DYNAMODB_FILES_TABLE_NAME", value = "${var.environment}-files" },
@@ -132,29 +133,3 @@ resource "aws_iam_role_policy_attachment" "sessions_redis_attach" {
 }
 
 
-
-resource "aws_s3_bucket_policy" "allow_sessions_access" {
-  bucket = var.bucket_id
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Principal = {
-          AWS = aws_iam_role.ecs_sessions_task_role.arn
-        }
-        Action = [
-          "s3:GetObject",
-          "s3:GetObjectAcl",
-          "s3:PutObject",
-          "s3:DeleteObject",
-          "s3:HeadObject"
-        ]
-        Resource = [
-          "${var.bucket_arn}/*"
-        ]
-      }
-    ]
-  })
-}
