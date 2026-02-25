@@ -1,6 +1,6 @@
 
 resource "aws_security_group" "redis_sg" {
-  name   = "lfusys-redis-sg"
+  name   = "${var.environment}-lfusys-redis-sg"
   vpc_id = var.vpc_id
 
   ingress {
@@ -28,14 +28,15 @@ resource "aws_security_group" "redis_sg" {
 }
 
 resource "aws_elasticache_subnet_group" "redis" {
-  name       = "lfusys-redis-subnet-group"
+  name       = "${var.environment}-lfusys-redis-subnet-group"
   subnet_ids = var.subnet_private_ids
 }
 
 resource "aws_elasticache_cluster" "redis" {
-  cluster_id           = "lfusys-redis"
+  cluster_id           = "${var.environment}-lfusys-redis"
   engine               = "redis"
-  node_type            = "cache.t2.micro"
+  engine_version       = "6.x"
+  node_type            = "cache.t3.micro"
   num_cache_nodes      = 1
   parameter_group_name = "default.redis6.x"
   port                 = 6379

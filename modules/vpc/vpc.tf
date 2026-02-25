@@ -8,15 +8,15 @@ resource "aws_vpc" "lfusysvpc" {
   tags = {
     Project = var.project
 
-    Name = "${var.project}-vpc"
+    Name = "${var.environment}-${var.project}-vpc"
   }
 }
 
 data "aws_availability_zones" "available" {}
 
-// PUB Subnets (2 AZ)
+// PUB Subnets (2 AZ for HA, or 1 AZ for cost savings)
 resource "aws_subnet" "public" {
-  count                   = 2
+  count                   = var.enable_high_availability ? 2 : 1
   vpc_id                  = aws_vpc.lfusysvpc.id
   cidr_block              = cidrsubnet(aws_vpc.lfusysvpc.cidr_block, 8, count.index)
   availability_zone       = data.aws_availability_zones.available.names[count.index]
@@ -25,13 +25,13 @@ resource "aws_subnet" "public" {
   tags = {
     Project = var.project
 
-    Name = "${var.project}-subnet-public-${count.index}"
+    Name = "${var.environment}-${var.project}-subnet-public-${count.index}"
   }
 }
 
-// PRIV Subnets (2 AZ)
+// PRIV Subnets (2 AZ for HA, or 1 AZ for cost savings)
 resource "aws_subnet" "private" {
-  count             = 2
+  count             = var.enable_high_availability ? 2 : 1
   vpc_id            = aws_vpc.lfusysvpc.id
   cidr_block        = cidrsubnet(aws_vpc.lfusysvpc.cidr_block, 8, count.index + 10)
   availability_zone = data.aws_availability_zones.available.names[count.index]
@@ -39,7 +39,7 @@ resource "aws_subnet" "private" {
   tags = {
     Project = var.project
 
-    Name = "${var.project}-subnet-private-${count.index}"
+    Name = "${var.environment}-${var.project}-subnet-private-${count.index}"
   }
 }
 
@@ -48,7 +48,7 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.lfusysvpc.id
 
   tags = {
-    Name = "${var.project}-igw"
+    Name = "${var.environment}-${var.project}-igw"
   }
 }
 
@@ -64,23 +64,25 @@ resource "aws_route_table" "public_rt" {
 
 // Route table association for PUB subnets
 resource "aws_route_table_association" "public_assoc" {
-  count          = 2
+  count          = var.enable_high_availability ? 2 : 1
   subnet_id      = aws_subnet.public[count.index].id
   route_table_id = aws_route_table.public_rt.id
 }
 
 
-// NAT Gateway
+// NAT Gateway (only 1 for cost savings; use multiple for HA)
 resource "aws_eip" "lfusys-nat" {
+  count  = var.enable_high_availability ? 2 : 1
   domain = "vpc"
 }
 
 resource "aws_nat_gateway" "lfusys-nat" {
-  allocation_id = aws_eip.lfusys-nat.id
-  subnet_id     = aws_subnet.public[0].id
+  count         = var.enable_high_availability ? 2 : 1
+  allocation_id = aws_eip.lfusys-nat[count.index].id
+  subnet_id     = aws_subnet.public[count.index].id
 
   tags = {
-    Name = "${var.project}-nat"
+    Name = "${var.environment}-${var.project}-nat-${count.index}"
   }
 }
 
@@ -91,14 +93,14 @@ resource "aws_route_table" "private_rt" {
 
   route {
     cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.lfusys-nat.id
+    nat_gateway_id = aws_nat_gateway.lfusys-nat[0].id
   }
 }
 
 
 // Route table association for PRIV subnets
 resource "aws_route_table_association" "private_assoc" {
-  count          = 2
+  count          = var.enable_high_availability ? 2 : 1
   subnet_id      = aws_subnet.private[count.index].id
   route_table_id = aws_route_table.private_rt.id
 }

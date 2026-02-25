@@ -2,6 +2,15 @@ variable "region" {
   type = string
 }
 
+variable "project" {
+  type = string
+}
+
+variable "environment" {
+  type        = string
+  description = "Environment name (e.g., dev, prod)"
+}
+
 variable "vpc_id" {
   type = string
 }
@@ -65,15 +74,44 @@ variable "jwt_refresh_secret_key" {
 }
 
 variable "aws_access_key_id" {
-  type = string
+  type    = string
   default = ""
 }
 
 variable "aws_secret_access_key" {
-  type = string
+  type    = string
   default = ""
 }
 
 variable "aws_bucket_name" {
+  type = string
+}
+
+variable "domain" {
+  type        = string
+  description = "Domain for the API"
+}
+
+variable "frontend_url" {
+  type        = string
+  description = "Frontend URL for CORS and redirects"
+}
+
+variable "redis_host" {
+  type        = string
+  description = "Redis host endpoint"
+}
+
+variable "desired_count" {
+  type        = number
+  description = "Number of ECS task instances to run"
+  default     = 2
+}
+
+variable "bucket_id" {
+  type = string
+}
+
+variable "bucket_arn" {
   type = string
 }

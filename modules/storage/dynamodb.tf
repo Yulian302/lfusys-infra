@@ -1,6 +1,6 @@
 
 resource "aws_dynamodb_table" "uploads" {
-  name         = "uploads"
+  name         = "${var.environment}-uploads"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "upload_id"
 
@@ -33,7 +33,7 @@ resource "aws_dynamodb_table" "uploads" {
 
 
 resource "aws_dynamodb_table" "files" {
-  name         = "files"
+  name         = "${var.environment}-files"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "file_id"
 
@@ -59,7 +59,7 @@ resource "aws_dynamodb_table" "files" {
 }
 
 resource "aws_dynamodb_table" "users" {
-  name         = "users"
+  name         = "${var.environment}-users"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "email"
 

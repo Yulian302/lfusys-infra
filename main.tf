@@ -5,7 +5,7 @@ provider "aws" {
 
 // register domain with Route53
 data "aws_route53_zone" "main" {
-  name = var.domain
+  name = "lfusys.online"
 }
 
 resource "aws_acm_certificate" "cert" {
@@ -49,9 +49,17 @@ resource "aws_route53_record" "api" {
 module "ecs" {
   source = "./modules/ecs"
 
+  environment     = terraform.workspace
+  project         = var.project
   region          = var.region
   aws_account_id  = var.account_id
   aws_bucket_name = var.bucket_name
+  domain          = var.domain
+  frontend_url    = var.frontend_url
+  redis_host      = module.storage.redis_endpoint
+  desired_count   = var.desired_count
+  bucket_id       = module.storage.bucket_id
+  bucket_arn      = module.storage.bucket_arn
 
   vpc_id             = module.vpc.vpc_id
   subnet_private_ids = module.vpc.subnet_private_ids
@@ -76,6 +84,7 @@ module "ecs" {
 module "lb" {
   source = "./modules/lb"
 
+  environment       = terraform.workspace
   vpc_id            = module.vpc.vpc_id
   project           = var.project
   subnet_public_ids = module.vpc.subnet_public_ids
@@ -86,12 +95,14 @@ module "lb" {
 module "queues" {
   source = "./modules/queues"
 
-  project = var.project
+  environment = terraform.workspace
+  project     = var.project
 }
 
 module "storage" {
   source = "./modules/storage"
 
+  environment        = terraform.workspace
   vpc_id             = module.vpc.vpc_id
   ecs_sg_id          = module.ecs.ecs_sg_id
   sessions_sg_id     = module.ecs.sessions_sg_id
@@ -102,5 +113,7 @@ module "storage" {
 module "vpc" {
   source = "./modules/vpc"
 
-  project = var.project
+  environment              = terraform.workspace
+  project                  = var.project
+  enable_high_availability = var.enable_high_availability
 }

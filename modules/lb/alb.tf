@@ -1,6 +1,6 @@
 // Application Load Balancer (alb)
 resource "aws_lb" "main" {
-  name               = "lfusys-alb"
+  name               = "${var.environment}-lfusys-alb"
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb_sg.id]
   subnets            = var.subnet_public_ids
@@ -8,7 +8,7 @@ resource "aws_lb" "main" {
 
 // ALB Security Group (allows HTTP/HTTPS connections, no outbound rules)
 resource "aws_security_group" "alb_sg" {
-  name   = "lfusys-alb-sg"
+  name   = "${var.environment}-lfusys-alb-sg"
   vpc_id = var.vpc_id
 
   ingress {
@@ -40,7 +40,13 @@ resource "aws_lb_listener" "http" {
   protocol          = "HTTP"
 
   default_action {
-    type             = "forward"
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
     target_group_arn = aws_lb_target_group.gateway.arn
   }
 }
@@ -69,7 +75,7 @@ resource "aws_lb_listener_rule" "uploads_rule" {
 
   condition {
     path_pattern {
-      values = ["api/v1/upload/*"]
+      values = ["/api/v1/upload/*"]
     }
   }
 }
@@ -85,14 +91,14 @@ resource "aws_lb_listener_rule" "uploads_rule_https" {
 
   condition {
     path_pattern {
-      values = ["api/v1/upload/*"]
+      values = ["/api/v1/upload/*"]
     }
   }
 }
 
 // Target Group (Gateway service)
 resource "aws_lb_target_group" "gateway" {
-  name        = "lfusys-gateway-tg"
+  name        = "${var.environment}-lfusys-gateway-tg"
   port        = 8080
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
@@ -110,7 +116,7 @@ resource "aws_lb_target_group" "gateway" {
 
 // Target Group (Uploads service)
 resource "aws_lb_target_group" "uploads" {
-  name        = "lfusys-uploads-tg"
+  name        = "${var.environment}-lfusys-uploads-tg"
   port        = 8080
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
