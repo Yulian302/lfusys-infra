@@ -1,7 +1,8 @@
 
-# DynamoDB access policy
-resource "aws_iam_policy" "dynamodb_access" {
-  name = "${var.environment}-dynamodb-access"
+# DynamoDB policies for write-only and read-only regions
+# Primary database (writes+reads)
+resource "aws_iam_policy" "dynamodb_writes_reads" {
+  name = "${var.environment}-dynamodb-writes-reads-access"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -26,6 +27,30 @@ resource "aws_iam_policy" "dynamodb_access" {
     ]
   })
 }
+# Read-only databases (reads)
+resource "aws_iam_policy" "dynamodb_reads_only" {
+  name = "${var.environment}-dynamodb-reads-only-access"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "dynamodb:BatchGetItem",
+          "dynamodb:GetItem",
+          "dynamodb:Query",
+          "dynamodb:Scan",
+          "dynamodb:DescribeTable"
+        ]
+        Resource = [
+          "arn:aws:dynamodb:${var.replica_region}:${var.aws_account_id}:table/${var.environment}-*",
+        ]
+      }
+    ]
+  })
+}
+
 
 # S3 access policy
 resource "aws_iam_policy" "s3_access" {

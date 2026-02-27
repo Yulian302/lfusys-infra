@@ -2,6 +2,11 @@ variable "region" {
   type = string
 }
 
+# database replica region (reads-only)
+variable "replica_region" {
+  type = string
+}
+
 variable "project" {
   type = string
 }

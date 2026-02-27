@@ -26,6 +26,12 @@ resource "aws_dynamodb_table" "uploads" {
     type = "S"
   }
 
+  // replicas for reads only
+  replica {
+    region_name      = var.replica_region
+    consistency_mode = "EVENTUAL"
+  }
+
   tags = {
     Project = var.project
   }
@@ -53,6 +59,11 @@ resource "aws_dynamodb_table" "files" {
     type = "S"
   }
 
+  replica {
+    region_name      = var.replica_region
+    consistency_mode = "EVENTUAL"
+  }
+
   tags = {
     Project = var.project
   }
@@ -66,6 +77,11 @@ resource "aws_dynamodb_table" "users" {
   attribute {
     name = "email"
     type = "S"
+  }
+
+  replica {
+    region_name      = var.replica_region
+    consistency_mode = "EVENTUAL"
   }
 
   tags = {

@@ -183,10 +183,16 @@ resource "aws_iam_role_policy" "gateway_ecs_exec" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "gateway_dynamo_attach" {
+resource "aws_iam_role_policy_attachment" "gateway_primary_region_dynamo_attach" {
   role       = aws_iam_role.ecs_gateway_task_role.name
-  policy_arn = aws_iam_policy.dynamodb_access.arn
+  policy_arn = aws_iam_policy.dynamodb_writes_reads.arn
 }
+
+resource "aws_iam_role_policy_attachment" "gateway_replica_region_dynamo_attach" {
+  role       = aws_iam_role.ecs_gateway_task_role.name
+  policy_arn = aws_iam_policy.dynamodb_reads_only.arn
+}
+
 
 resource "aws_iam_role_policy_attachment" "gateway_redis_attach" {
   role       = aws_iam_role.ecs_gateway_task_role.name

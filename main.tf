@@ -52,6 +52,7 @@ module "ecs" {
   environment     = terraform.workspace
   project         = var.project
   region          = var.region
+  replica_region  = var.replica_region
   aws_account_id  = var.account_id
   aws_bucket_name = var.bucket_name
   domain          = var.domain
@@ -103,6 +104,7 @@ module "storage" {
   source = "./modules/storage"
 
   environment        = terraform.workspace
+  replica_region     = var.replica_region
   vpc_id             = module.vpc.vpc_id
   ecs_sg_id          = module.ecs.ecs_sg_id
   sessions_sg_id     = module.ecs.sessions_sg_id

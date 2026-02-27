@@ -11,4 +11,4 @@ admin.tf
 
 
 .env
-terraform.prod.tfvars
+terraform.*.tfvars
