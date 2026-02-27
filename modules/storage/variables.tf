@@ -1,4 +1,6 @@
-
+variable "replica_region" {
+  type = string
+}
 
 
 variable "project" {

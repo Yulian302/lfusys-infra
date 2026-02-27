@@ -112,9 +112,14 @@ resource "aws_iam_role" "ecs_sessions_task_role" {
 }
 
 
-resource "aws_iam_role_policy_attachment" "sessions_dynamo_attach" {
+resource "aws_iam_role_policy_attachment" "sessions_primary_region_dynamo_attach" {
   role       = aws_iam_role.ecs_sessions_task_role.name
-  policy_arn = aws_iam_policy.dynamodb_access.arn
+  policy_arn = aws_iam_policy.dynamodb_writes_reads.arn
+}
+
+resource "aws_iam_role_policy_attachment" "sessions_replica_region_dynamo_attach" {
+  role       = aws_iam_role.ecs_sessions_task_role.name
+  policy_arn = aws_iam_policy.dynamodb_reads_only.arn
 }
 
 resource "aws_iam_role_policy_attachment" "sessions_sqs_attach" {

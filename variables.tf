@@ -2,6 +2,10 @@ variable "region" {
   default = "eu-north-1"
 }
 
+variable "replica_region" {
+  default = "eu-west-3"
+}
+
 variable "account_id" {
   default = "359952178231"
 }
