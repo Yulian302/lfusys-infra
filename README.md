@@ -5,10 +5,12 @@
 ![Network](./aws/network-diagram.svg)
 <br>Updated 2026/02/23
 
+## Dependency View diagram
+
 <div style="text-align:center;">
 
 ![Dependency](./aws/service-dependency-diagram.svg)
-<br>Updated 2026/02/23
+<br>Updated 2026/03/02
 
 </div>
 
@@ -20,6 +22,13 @@
 ![System Diagram Sketch Evolved](./design/evolved_design_24_02_2026.svg)
 
 <br>Updated 2026/02/24
+
+![System Diagram Sketch Evolved2](./design/evolved_design_02_03_2026.svg)
+
+<br>Updated 2026/03/02
+
+Changes: S3 directly emits upload events to SQS on upload completeness. This change makes system more resilient and prevents from lost upload events when Uploads Service crashes right after uploading to S3. Outbox pattern could not be used here, as we cannot atomically upload to S3 and write an event to the outbox database. So S3 here acts as a single source of truth.
+
 
 ## Evolved Service Interactions Diagram
 ![Service Interactions Diagram](./design/evolution/20-12-2025-service-interaction-diagram.png)
