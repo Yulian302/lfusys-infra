@@ -14,6 +14,17 @@
 
 </div>
 
+## Data Flow Diagram
+
+<div style="text-align:center;">
+
+![DataFlow](./aws/data-flow-diagram.png)
+<br>Updated 2026/03/02
+
+</div>
+
+Scenario: Successful file upload
+
 # Design Evolution
 ## Initial sketch
 ![System Diagram Sketch](./design/design.png)
