@@ -1,6 +1,6 @@
 
 resource "aws_dynamodb_table" "uploads" {
-  name         = "${var.environment}-uploads"
+  name         = "uploads"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "upload_id"
 
@@ -26,12 +26,6 @@ resource "aws_dynamodb_table" "uploads" {
     type = "S"
   }
 
-  // replicas for reads only
-  replica {
-    region_name      = var.replica_region
-    consistency_mode = "EVENTUAL"
-  }
-
   tags = {
     Project = var.project
   }
@@ -39,7 +33,7 @@ resource "aws_dynamodb_table" "uploads" {
 
 
 resource "aws_dynamodb_table" "files" {
-  name         = "${var.environment}-files"
+  name         = "files"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "file_id"
 
@@ -59,29 +53,19 @@ resource "aws_dynamodb_table" "files" {
     type = "S"
   }
 
-  replica {
-    region_name      = var.replica_region
-    consistency_mode = "EVENTUAL"
-  }
-
   tags = {
     Project = var.project
   }
 }
 
 resource "aws_dynamodb_table" "users" {
-  name         = "${var.environment}-users"
+  name         = "users"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "email"
 
   attribute {
     name = "email"
     type = "S"
-  }
-
-  replica {
-    region_name      = var.replica_region
-    consistency_mode = "EVENTUAL"
   }
 
   tags = {
