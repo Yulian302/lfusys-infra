@@ -110,7 +110,11 @@ variable "redis_host" {
 variable "desired_count" {
   type        = number
   description = "Number of ECS task instances to run"
-  default     = 2
+  default     = 1
+}
+
+variable "uploads_notifications_queue_name" {
+  type = string
 }
 
 variable "bucket_id" {

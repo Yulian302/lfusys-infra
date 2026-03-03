@@ -73,6 +73,10 @@ resource "aws_ecs_service" "sessions" {
     assign_public_ip = false
   }
 
+  lifecycle {
+    ignore_changes = [desired_count]
+  }
+
   service_connect_configuration {
     enabled   = true
     namespace = aws_service_discovery_private_dns_namespace.lfusys.arn
@@ -137,4 +141,37 @@ resource "aws_iam_role_policy_attachment" "sessions_redis_attach" {
   policy_arn = aws_iam_policy.redis_data_access.arn
 }
 
+// Scale Sessions Service (consumer) if SQS is overpopulated
+resource "aws_appautoscaling_target" "ecs_sessions_target" {
+  min_capacity       = 1
+  max_capacity       = 10
+  resource_id        = aws_ecs_service.sessions.id
+  scalable_dimension = "ecs:service:DesiredCount"
+  service_namespace  = "ecs"
+}
 
+resource "aws_appautoscaling_policy" "sessions_sqs_scaling" {
+  name               = "sessions-sqs-scaling"
+  policy_type        = "TargetTrackingScaling"
+  resource_id        = aws_appautoscaling_target.ecs_sessions_target.id
+  scalable_dimension = aws_appautoscaling_target.ecs_sessions_target.scalable_dimension
+  service_namespace  = aws_appautoscaling_target.ecs_sessions_target.service_namespace
+
+  target_tracking_scaling_policy_configuration {
+
+    customized_metric_specification {
+      namespace   = "AWS/SQS"
+      metric_name = "ApproximateNumberOfMessagesVisible"
+      statistic   = "Average"
+
+      dimensions {
+        name  = "QueueName"
+        value = var.uploads_notifications_queue_name
+      }
+    }
+
+    target_value       = 50
+    scale_in_cooldown  = 60
+    scale_out_cooldown = 30
+  }
+}

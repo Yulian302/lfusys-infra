@@ -37,7 +37,7 @@ variable "enable_high_availability" {
 variable "desired_count" {
   description = "Number of ECS task instances to run per service"
   type        = number
-  default     = 2
+  default     = 1
 }
 
 variable "github_client_id" {
